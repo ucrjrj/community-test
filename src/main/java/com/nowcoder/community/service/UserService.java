@@ -17,13 +17,14 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserService implements CommunityConstant {
 
-    @Autowired
+    @Resource
     private UserMapper userMapper;
 
     @Autowired
@@ -91,7 +92,7 @@ public class UserService implements CommunityConstant {
         user.setSalt(CommunityUtil.generateUUID().substring(0, 5));
         user.setPassword(CommunityUtil.md5(user.getPassword() + user.getSalt()));
         user.setType(0);
-        user.setStatus(0);
+        user.setStatus(1);
         user.setActivationCode(CommunityUtil.generateUUID());
         user.setHeaderUrl(String.format("http://images.nowcoder.com/head/%dt.png", new Random().nextInt(1000)));
         user.setCreateTime(new Date());
@@ -104,7 +105,7 @@ public class UserService implements CommunityConstant {
         String url = domain + contextPath + "/activation/" + user.getId() + "/" + user.getActivationCode();
         context.setVariable("url", url);
         String content = templateEngine.process("/mail/activation", context);
-        mailClient.sendMail(user.getEmail(), "激活账号", content);
+        mailClient.sendMail(user.getEmail(), "注册账号通知", content);
 
         return map;
     }
@@ -118,6 +119,7 @@ public class UserService implements CommunityConstant {
             clearCache(userId);
             return ACTIVATION_SUCCESS;
         } else {
+            //todo bug
             return ACTIVATION_FAILURE;
         }
     }
@@ -142,7 +144,7 @@ public class UserService implements CommunityConstant {
             return map;
         }
 
-        // 验证状态
+//         验证状态
         if (user.getStatus() == 0) {
             map.put("usernameMsg", "该账号未激活!");
             return map;

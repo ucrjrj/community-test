@@ -233,7 +233,9 @@ public class MessageController implements CommunityConstant {
     @RequestMapping(path = "/notice/detail/{topic}", method = RequestMethod.GET)
     public String getNoticeDetail(@PathVariable("topic") String topic, Page page, Model model) {
         User user = hostHolder.getUser();
-
+        if (user == null)
+            System.out.println("null ---------------------");
+        else System.out.println(user);
         page.setLimit(5);
         page.setPath("/notice/detail/" + topic);
         page.setRows(messageService.findNoticeCount(user.getId(), topic));

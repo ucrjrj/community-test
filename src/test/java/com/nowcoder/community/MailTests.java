@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.thymeleaf.TemplateEngine;
@@ -12,6 +13,7 @@ import org.thymeleaf.context.Context;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@ActiveProfiles("develop")
 @ContextConfiguration(classes = CommunityApplication.class)
 public class MailTests {
 
@@ -23,7 +25,7 @@ public class MailTests {
 
     @Test
     public void testTextMail() {
-        mailClient.sendMail("lihonghe@nowcoder.com", "TEST", "Welcome.");
+        mailClient.sendMail("codemeifan@gmail.com", "TEST", "Welcome.");
     }
 
     @Test
